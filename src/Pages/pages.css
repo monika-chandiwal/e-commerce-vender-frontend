@@ -1,0 +1,49 @@
+/* pages.css */
+
+.signup input::placeholder {
+  color: #ccc;
+  opacity: 1;
+}
+
+.signupButton:hover,
+.loginButton:hover {
+  font-size: larger !important;
+
+  border: 1px solid #ccc;
+  background-color: rgb(226, 224, 224);
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.6rem;
+}
+
+.polygon-footer {
+  padding: 2rem 4rem 0;
+  display: flex;
+  column-gap: 3rem;
+  justify-content: space-between;
+  clip-path: polygon(
+    32% 13%,
+    68% 0,
+    100% 11%,
+    100% 100%,
+    70% 100%,
+    30% 100%,
+    0 99%,
+    0 0
+  );
+  text-align: center;
+}
+
+.ContactIcons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 1.5rem;
+}
+
+.footerContent {
+  font-size: 0.9rem;
+}
+.footerContent :link:hover {
+  text-decoration: underline;
+  font-size: 1rem;
+}

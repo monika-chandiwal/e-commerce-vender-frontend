@@ -1,7 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { Navbar, Nav, Container, Form, Card } from "react-bootstrap";
-import { IoCartOutline } from "react-icons/io5";
 import { FaRegHeart, FaRegUserCircle } from "react-icons/fa";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
@@ -87,20 +86,22 @@ export default function NavbarComponent() {
             <Nav.Link href="/women">Services</Nav.Link>
 
             <Nav.Link href="/kids">FAQs</Nav.Link>
-          </Nav>
 
-          <Nav>
             {!isLoggedIn ? (
-              <Nav.Link href="/login">
+              <Nav.Link href="/login" style={{ float: "right" }}>
                 <FaRegUserCircle className="spinning-icon" /> Login
               </Nav.Link>
             ) : (
-              <div className="position-relative">
+              <div className="position-relative" style={{ float: "right" }}>
                 <div onClick={handleProfileClick}>
                   {profilePic == null ? (
                     <p className="loginUserProperty">{initials}</p>
                   ) : (
-                    <img src={profilePic} className="imgProperty" />
+                    <img
+                      src={profilePic}
+                      style={{ maxWidth: "1rem" }}
+                      className="imgProperty"
+                    />
                   )}
                 </div>
 

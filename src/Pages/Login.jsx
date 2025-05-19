@@ -57,12 +57,6 @@ export default function Login() {
     }
   };
 
-  // Google OAuth login handler
-  const handleGoogleLogin = () => {
-    window.location.href =
-      "http://localhost:8080/oauth2/authorization/google?prompt=select_account";
-  };
-
   return (
     <>
       <NavbarComponent />
@@ -154,19 +148,12 @@ export default function Login() {
           <p className="text-center mt-4">
             Don't have an account?{" "}
             <Nav.Link
-              href="/signup"
+              href="/mobileOtpVerification"
               style={{ display: "inline", color: "black" }}
             >
-              Signup
+              Register
             </Nav.Link>
           </p>
-
-          {/* Google OAuth Button */}
-          <div className="text-center mt-3">
-            <Button onClick={handleGoogleLogin} variant={theme}>
-              <FcGoogle /> Continue with Google
-            </Button>
-          </div>
         </Form>
       </Container>
     </>

@@ -16,56 +16,64 @@ import NavbarComponent from "../Common/Navbar";
 import { FcGoogle } from "react-icons/fc";
 import "./pages.css";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export default function Signup() {
+  const query = new URLSearchParams(useLocation().search);
+  const phoneNumber = query.get("phone");
+  //console.log(phoneNumber);
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-
+  const [brand, setBrand] = useState("");
+  const [address, setAddress] = useState("");
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
   const saveUser = (e) => {
     e.preventDefault();
-    const user = { email, username, password, toFactorAuthentication };
+    const vendor = { phoneNumber, name, email, password, brand, address };
+    //console.log(name);
     {
-      isEmailVerified
-        ? fetch("http://localhost:8080/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user),
-          })
-            .then((response) => {
-              if (response.ok) {
-                toast.success(`${user.username} signed up successfully!`, {
-                  position: "bottom-left",
-                  autoClose: 3000,
-                });
-              } else if (response.status === 409) {
-                response.text().then((errorMessage) => {
-                  toast.error(`${errorMessage}, try again`, {
-                    position: "bottom-left",
-                    autoClose: 5000,
-                    hideProgressBar: true,
-                  });
-                });
-              }
-            })
-            .catch((error) => {
-              console.error("Network error:", error);
-              toast.error("Something went wrong. Please try again later.", {
+      fetch("http://localhost:8080/vendor/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(vendor),
+      })
+        .then((response) => {
+          if (response.ok) {
+            toast.success(`${vendor.name} signed up successfully!`, {
+              position: "bottom-left",
+              autoClose: 3000,
+            });
+            navigate("/vendor/addProduct");
+          } else if (response.status === 409) {
+            response.text().then((errorMessage) => {
+              toast.error(`${errorMessage}, try again`, {
                 position: "bottom-left",
-                autoClose: 3000,
+                autoClose: 5000,
                 hideProgressBar: true,
               });
-            })
-        : toast.warning("please verify your email first", {
-            autoClose: 4000,
+            });
+          } else if (response.status === 406) {
+            response.text().then((errorMessage) => {
+              toast.error(`${errorMessage}, try again`, {
+                position: "bottom-left",
+                autoClose: 5000,
+                hideProgressBar: true,
+              });
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Network error:", error);
+          toast.error("Something went wrong. Please try again later.", {
             position: "bottom-left",
+            autoClose: 3000,
             hideProgressBar: true,
           });
-      navigate("/venderBrandDetails");
+        });
     }
   };
 
@@ -90,10 +98,10 @@ export default function Signup() {
               <Form.Control
                 required
                 type="text"
-                placeholder="Username"
+                placeholder="Name"
                 className="bg-dark text-white border-light"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </Col>
           </Form.Group>
@@ -157,6 +165,30 @@ export default function Signup() {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </InputGroup.Text>
               </InputGroup>
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-4 justify-content-center">
+            <Col sm={8}>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Manufactured By..."
+                className="border-dark"
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-4 justify-content-center">
+            <Col sm={8}>
+              <Form.Control
+                required
+                as="textarea"
+                placeholder="Add Manufacturer address ..."
+                className="border-dark"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
             </Col>
           </Form.Group>
 

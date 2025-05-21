@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Container, Form, Button, ToastContainer } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ThemeContext from "../Common/ThemeContext";
 import { ToastContainer, toast } from "react-toastify";
@@ -57,10 +57,21 @@ export default function MobileOtpVerification() {
 
       const data = await response.json();
       console.log("OTP verified:", data);
+      toast.success("OTP verified Successfully", {
+        autoClose: 1000,
+        position: "bottom-left",
+        hideProgressBar: true,
+      });
 
-      navigate("/signup");
+      navigate(`/vendor/signup?phone=${phoneNumber}`);
     } catch (error) {
       console.log("error:", error.message);
+
+      toast.error("Failed to verify OTP", {
+        autoClose: 3000,
+        position: "bottom-left",
+        hideProgressBar: true,
+      });
     }
   };
 
@@ -116,7 +127,7 @@ export default function MobileOtpVerification() {
             <Form.Control
               type="text"
               isInvalid={isInvalid}
-              placeholder="Enter phone number"
+              placeholder="Enter otp here"
               value={otp}
               onChange={(e) => {
                 const value = e.target.value.replace(/[^0-9]/g, "");

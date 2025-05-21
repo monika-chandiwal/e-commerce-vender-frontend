@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { FiUserPlus } from "react-icons/fi";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import ThemeContext from "./ThemeContext";
+import "./Navbar.css";
+import { IoBagAdd } from "react-icons/io5";
 
 export default function NavbarComponent() {
   const [query, setQuery] = useState("");
@@ -19,26 +21,28 @@ export default function NavbarComponent() {
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   const fullName = localStorage.getItem("username") || "";
   const email = localStorage.getItem("useremail") || "";
+  const id = localStorage.getItem("id");
   const profilePic = localStorage.getItem("profilePic");
   const [profile, setProfile] = useState("");
+
   console.log(profile);
 
   //console.log({ profilePic });
-  const initials = fullName
-    .split(" ")
-    .map((n, i) => (i < 2 ? n[0] : ""))
-    .join("")
-    .toUpperCase();
+  // const initials = fullName
+  //   .split(" ")
+  //   .map((n, i) => (i < 2 ? n[0] : ""))
+  //   .join("")
+  //   .toUpperCase();
 
   const handleLogout = async () => {
     try {
-      await fetch("http://localhost:8080/vender/logout", {
+      await fetch("http://localhost:8080/vendor/logout", {
         method: "GET",
         credentials: "include",
       });
-      console.log("logout", localStorage.getItem("username"));
+      console.log("logout", localStorage.getItem("name"));
       localStorage.clear();
-      navigate("/login"); // this is frontend redirect
+      navigate("/vendor/login"); // this is frontend redirect
     } catch (err) {
       console.error("Logout failed:", err);
     }
@@ -80,22 +84,41 @@ export default function NavbarComponent() {
         <Navbar.Brand href="/">StyliQue</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto align-items-center  w-100">
+          <Nav className="ms-auto align-items-center w-100">
             <Nav.Link href="/">Sell</Nav.Link>
             <Nav.Link href="/women">Success Stories</Nav.Link>
             <Nav.Link href="/women">Services</Nav.Link>
 
             <Nav.Link href="/kids">FAQs</Nav.Link>
+          </Nav>
+          <Nav className="flex-d justify-content-center align-items-center">
+            {isLoggedIn ? (
+              <Nav.Link
+                href={`/vendor/addProduct?id=${localStorage.getItem("id")}`}
+                className=" loginUserProperty"
+              >
+                <IoBagAdd
+                  style={{
+                    paddingBottom: "5px",
+                    width: "30px",
+                    height: "20px",
+                  }}
+                />
+                Add New Product To Your Shop
+              </Nav.Link>
+            ) : (
+              ""
+            )}
 
             {!isLoggedIn ? (
-              <Nav.Link href="/login" style={{ float: "right" }}>
+              <Nav.Link href="/vendor/login" style={{ float: "right" }}>
                 <FaRegUserCircle className="spinning-icon" /> Login
               </Nav.Link>
             ) : (
               <div className="position-relative" style={{ float: "right" }}>
                 <div onClick={handleProfileClick}>
                   {profilePic == null ? (
-                    <p className="loginUserProperty">{initials}</p>
+                    <p className="loginUserProperty">Welcome, {fullName}</p>
                   ) : (
                     <img
                       src={profilePic}
@@ -161,8 +184,11 @@ export default function NavbarComponent() {
                           className="text-muted"
                           style={{ fontSize: "0.85rem" }}
                         >
-                          {email}
+                          {email}{" "}
                         </div>
+                      </div>
+                      <div style={{ fontSize: "0.85rem" }}>
+                        Your Vendor ID : <strong>{id}</strong>
                       </div>
                       <Form>
                         <Form.Check

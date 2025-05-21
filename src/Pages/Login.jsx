@@ -12,7 +12,7 @@ import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import "./pages.css";
 import NavbarComponent from "../Common/Navbar";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import ThemeContext from "../Common/ThemeContext";
 
 export default function Login() {
@@ -34,23 +34,24 @@ export default function Login() {
     setError(""); // Clear old error
 
     try {
-      const response = await fetch("http://localhost:8080/vender/login", {
+      const response = await fetch("http://localhost:8080/vendor/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email, password: password }),
       });
 
       if (!response.ok) throw new Error("Invalid credentials");
 
       const vender = await response.json();
       localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("username", vender.username);
+      localStorage.setItem("id", vender.id);
+      localStorage.setItem("username", vender.name);
       localStorage.setItem("useremail", vender.email);
       console.log("Manual login ", vender);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
       setError("Invalid email or password. Please try again.");
@@ -148,7 +149,7 @@ export default function Login() {
           <p className="text-center mt-4">
             Don't have an account?{" "}
             <Nav.Link
-              href="/mobileOtpVerification"
+              href="/vendor/mobileOtpVerification"
               style={{ display: "inline", color: "black" }}
             >
               Register

@@ -1,7 +1,8 @@
 import { useState, useContext } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, ToastContainer } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ThemeContext from "../Common/ThemeContext";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function MobileOtpVerification() {
   const { theme } = useContext(ThemeContext);
@@ -15,17 +16,12 @@ export default function MobileOtpVerification() {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/vendor/otpVerification",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ phoneNumber }),
-        }
-      );
+      const response = await fetch("http://localhost:8080/vendor/otpRequest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // very important if you're using sessions
+        body: JSON.stringify({ phoneNumber }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -34,7 +30,7 @@ export default function MobileOtpVerification() {
 
       const data = await response.json();
       console.log("OTP sent successfully:", data);
-
+      setIsInvalid(false);
       setSentOtp(true); // mark OTP as sent only on success
     } catch (error) {
       console.error("Error sending OTP:", error.message);
@@ -44,12 +40,30 @@ export default function MobileOtpVerification() {
   const verifyOtp = async (e) => {
     e.preventDefault();
     try {
-      console.log("otp verified");
+      const response = await fetch("http://localhost:8080/vendor/verifyOtp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          phoneNumber: phoneNumber,
+          otp: otp,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to verify OTP");
+      }
+
+      const data = await response.json();
+      console.log("OTP verified:", data);
+
       navigate("/signup");
-    } catch (e) {
-      console.log("error : ", e);
+    } catch (error) {
+      console.log("error:", error.message);
     }
   };
+
   return (
     <Container
       fluid
@@ -101,9 +115,19 @@ export default function MobileOtpVerification() {
             <Form.Label>OTP : </Form.Label>
             <Form.Control
               type="text"
+              isInvalid={isInvalid}
               placeholder="Enter phone number"
               value={otp}
-              onChange={(e) => setOtp(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/[^0-9]/g, "");
+                setOtp(value);
+
+                if (value.length !== 6) {
+                  setIsInvalid(true);
+                } else {
+                  setIsInvalid(false);
+                }
+              }}
             />
             <Button className="mt-3" variant={theme} onClick={verifyOtp}>
               Verify OTP
@@ -111,6 +135,7 @@ export default function MobileOtpVerification() {
           </Form.Group>
         )}
       </Form>
+      <ToastContainer />
     </Container>
   );
 }

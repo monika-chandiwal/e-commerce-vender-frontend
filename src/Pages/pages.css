@@ -47,3 +47,35 @@
   text-decoration: underline;
   font-size: 1rem;
 }
+
+.vendorProducts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0;
+  list-style: none;
+  border: none;
+}
+
+.vendorProducts li {
+  flex: 1 1 200px;
+  max-width: 300px;
+  border: none;
+  padding: 10px;
+
+  background-color: #fff;
+  text-align: center;
+}
+
+.vendorProducts li .imageStyle {
+  height: 20rem;
+  width: 100%;
+  object-fit: cover !important;
+
+  transition: transform 0.5s ease-in-out;
+}
+
+.vendorProducts li:hover {
+  transform: scale(1.05);
+}

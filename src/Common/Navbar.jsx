@@ -204,6 +204,12 @@ export default function NavbarComponent() {
                       </Form>
                     </Card.Body>
                     <Card.Footer>
+                      <Nav.Link href="/vendor/dashboard">
+                        <button className="btn btn-success w-100">
+                          See Your Shop
+                        </button>
+                      </Nav.Link>
+
                       <button
                         onClick={handleLogout}
                         className="btn btn-danger w-100"

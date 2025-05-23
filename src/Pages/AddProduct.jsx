@@ -116,7 +116,7 @@ export default function AddProduct() {
           style={{ width: "100%", maxWidth: "600px" }}
           className="p-4 rounded bg-secondary"
         >
-          <h3 className="text-center mb-5">Register</h3>
+          <h3 className="text-center mb-5">Add Product</h3>
 
           {/* Form Fields */}
           <Form.Group as={Row} className="mb-4 justify-content-center">

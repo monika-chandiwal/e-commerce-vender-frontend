@@ -108,7 +108,7 @@ export default function Dashboard() {
                   className="imageStyle"
                 />
                 <Card.Body>
-                  <Card.Title>{product.vendor.brand}</Card.Title>
+                  <Card.Title>{product.brand}</Card.Title>
                   <Card.Text>
                     {product.type}'s {product.name}
                     <br />

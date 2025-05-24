@@ -8,7 +8,7 @@ import "./pages.css";
 
 export default function AddProduct() {
   const query = new URLSearchParams(useLocation().search);
-  const id = query.get("id");
+  const id = query.get("id") || localStorage.getItem("id");
 
   const [productAdded, setProductAdded] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -17,13 +17,17 @@ export default function AddProduct() {
   const [price, setPrice] = useState("");
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(0);
-  const [size, setSize] = useState("");
+
   const [type, setType] = useState("");
+  const [brand, setBrand] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
+  const [sizes, setSizes] = useState([]);
+
+  console.log(sizes);
   const saveProduct = (e) => {
     e.preventDefault();
     const product = {
@@ -31,8 +35,9 @@ export default function AddProduct() {
       description,
       price: parseFloat(price),
       quantity: parseInt(quantity),
-      size,
+      sizes,
       type,
+      brand,
       imageUrl,
       vendor: {
         id: parseInt(id),
@@ -95,7 +100,7 @@ export default function AddProduct() {
               setDescription("");
               setPrice("");
               setQuantity(0);
-              setSize("");
+              setSizes("");
               setType("");
               setImageUrl("");
               navigate("/vendor/home");
@@ -158,29 +163,40 @@ export default function AddProduct() {
             </Col>
           </Form.Group>
 
-          <Form.Group as={Row} className="mb-4 justify-content-center">
+          <Form.Group as={Row} className="mb-4 justify-content-center b">
             <Col sm={8}>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Size"
-                className="bg-dark text-white border-light"
-                value={size}
-                onChange={(e) => setSize(e.target.value)}
-              />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="mb-4 justify-content-center">
-            <Col sm={8}>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Type"
-                className="bg-dark text-white border-light"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-              />
+              <div
+                key="inline-checkbox"
+                className="mb-1 text-white bg-dark border-light"
+                style={{
+                  display: "flex",
+                  border: "1px solid",
+                  borderColor: "white",
+                  borderRadius: "0.4rem",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                {["S", "M", "L", "XL", "XXL"].map((sizeOption, index) => (
+                  <Form.Check
+                    inline
+                    key={index}
+                    label={sizeOption}
+                    value={sizeOption}
+                    name="sizes"
+                    type="checkbox"
+                    id={`inline-checkbox-${index}`}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (e.target.checked) {
+                        setSizes([...sizes, value]);
+                      } else {
+                        setSizes(sizes.filter((size) => size !== value));
+                      }
+                    }}
+                    className="text-white m-2"
+                  />
+                ))}
+              </div>
             </Col>
           </Form.Group>
 
@@ -193,6 +209,30 @@ export default function AddProduct() {
                 className="bg-dark text-white border-light"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-4 justify-content-center">
+            <Col sm={8}>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Brand"
+                className="bg-dark text-white border-light"
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              />
+            </Col>
+          </Form.Group>
+          <Form.Group as={Row} className="mb-4 justify-content-center">
+            <Col sm={8}>
+              <Form.Control
+                required
+                type="text"
+                placeholder="Men | Women | Kids | Beauty ..."
+                className="bg-dark text-white border-light"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
               />
             </Col>
           </Form.Group>
@@ -214,9 +254,10 @@ export default function AddProduct() {
             <Col sm={8}>
               <Form.Control
                 disabled
-                type="number"
+                type="text"
                 className="bg-dark text-white border-light"
                 value={id}
+                placeholder={id == null ? " null " : id}
               />
             </Col>
           </Form.Group>

@@ -1,25 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Card, Container, Button, Nav } from "react-bootstrap";
 import ThemeContext from "../Common/ThemeContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import UpdateProduct from "./UpdateProduct";
 
 export default function Dashboard() {
   const { theme } = useContext(ThemeContext);
   const [products, setProducts] = useState([]);
-
-  const updateProduct = async (productId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/vendor/dashboard/productUpdate${productId}`
-      );
-      if (!response.ok) {
-        throw new Error("Failed to update products");
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
+  const navigate = useNavigate();
   const deleteProduct = async (productId) => {
     try {
       const response = await fetch(
@@ -121,11 +109,18 @@ export default function Dashboard() {
                         ? "Only few Left"
                         : `${product.quantity} left`}
                     </span>
-                    , Available size: {product.size}
+                    , Available size: {product.sizes.join(",")}
                   </Card.Text>
                 </Card.Body>
                 <Card.Footer className="d-flex-row">
-                  <Button variant={theme} onClick={updateProduct}>
+                  <Button
+                    variant={theme}
+                    onClick={() =>
+                      navigate(
+                        `/vendor/updateProduct?productId=${product.id}&productName=${product.name}&productPrice=${product.price}&productType=${product.type}&productDescription=${product.description}&productImg=${product.imageUrl}&productBrand=${product.brand}&productSize=${product.sizes}&productQuantity=${product.quantity}`
+                      )
+                    }
+                  >
                     Update Product
                   </Button>
                   <Button
@@ -138,19 +133,17 @@ export default function Dashboard() {
               </Card>
             </li>
           ))}
-          <Button
-            style={{
-              background: "none",
-              border: "none",
-              color: "black",
-              textDecoration: "underline",
-            }}
-            onClick={deleteAllProduct}
-          >
-            Delete all products, if you want to close your shop
-          </Button>
         </ul>
       )}
+      <div className="text-center">
+        <Button
+          className="btn btn-secondary m-1 pt-0"
+          onClick={deleteAllProduct}
+        >
+          <br />
+          Delete all products, if you want to close your shop
+        </Button>
+      </div>
     </Container>
   );
 }

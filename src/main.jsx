@@ -10,6 +10,7 @@ import ThemeProvider from "./Common/ThemeProvider.jsx";
 import MobileOtpVerification from "./Pages/MobileOtpVerification.jsx";
 import AddProduct from "./Pages/addProduct.jsx";
 import Dashboard from "./Pages/Dashboard.jsx";
+import UpdateProduct from "./Pages/UpdateProduct.jsx";
 
 createRoot(document.getElementById("root")).render(
   <ThemeProvider>
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")).render(
           element={<MobileOtpVerification />}
         />
         <Route path="/vendor/dashboard" element={<Dashboard />} />
+        <Route path="/vendor/updateProduct/*" element={<UpdateProduct />} />
         <Route path="/vendor/addProduct" element={<AddProduct />} />
 
         <Route path="*" element={<div>Page not found</div>} />

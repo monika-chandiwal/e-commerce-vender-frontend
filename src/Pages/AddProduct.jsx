@@ -25,7 +25,8 @@ export default function AddProduct() {
   const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
-  const [sizes, setSizes] = useState([]);
+  const [sizes, setSizes] = useState({});
+  console.log(sizes);
 
   //console.log(sizes);
   const saveProduct = (e) => {
@@ -167,35 +168,55 @@ export default function AddProduct() {
           <Form.Group as={Row} className="mb-4 justify-content-center b">
             <Col sm={8}>
               <div
-                key="inline-checkbox"
                 className="mb-1 text-white bg-dark border-light"
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   border: "1px solid",
                   borderColor: "white",
                   borderRadius: "0.4rem",
-                  justifyContent: "space-evenly",
+                  padding: "1rem",
                 }}
               >
                 {["S", "M", "L", "XL", "XXL"].map((sizeOption, index) => (
-                  <Form.Check
-                    inline
-                    key={index}
-                    label={sizeOption}
-                    value={sizeOption}
-                    name="sizes"
-                    type="checkbox"
-                    id={`inline-checkbox-${index}`}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      if (e.target.checked) {
-                        setSizes([...sizes, value]);
-                      } else {
-                        setSizes(sizes.filter((size) => size !== value));
-                      }
-                    }}
-                    className="text-white m-2"
-                  />
+                  <div key={index} className="d-flex align-items-center mb-2">
+                    <Form.Check
+                      inline
+                      label={sizeOption}
+                      value={sizeOption}
+                      name="sizes"
+                      type="checkbox"
+                      id={`inline-checkbox-${index}`}
+                      checked={sizes[sizeOption] !== undefined}
+                      onChange={(e) => {
+                        const checked = e.target.checked;
+                        setSizes((prev) => {
+                          const updated = { ...prev };
+                          if (checked) {
+                            updated[sizeOption] = ""; // default empty quantity
+                          } else {
+                            delete updated[sizeOption];
+                          }
+                          return updated;
+                        });
+                      }}
+                      className="text-white me-2"
+                    />
+                    {sizes[sizeOption] !== undefined && (
+                      <Form.Control
+                        type="number"
+                        placeholder="Quantity"
+                        className="bg-dark text-white border-light w-30"
+                        value={sizes[sizeOption]}
+                        onChange={(e) =>
+                          setSizes((prev) => ({
+                            ...prev,
+                            [sizeOption]: e.target.value,
+                          }))
+                        }
+                      />
+                    )}
+                  </div>
                 ))}
               </div>
             </Col>

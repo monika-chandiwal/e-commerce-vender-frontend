@@ -279,7 +279,7 @@ export default function AddProduct() {
                 type="text"
                 className="bg-dark text-white border-light"
                 value={id}
-                placeholder={id == null ? " null " : id}
+                placeholder={id == null ? " null " : `vendor id : ${id}`}
               />
             </Col>
           </Form.Group>

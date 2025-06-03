@@ -109,7 +109,13 @@ export default function Dashboard() {
                         ? "Only few Left"
                         : `${product.quantity} left`}
                     </span>
-                    , Available size: {product.sizes.join(",")}
+                    <br />
+                    Available sizes:
+                    {Object.entries(product.sizes).map(([size, stock]) => (
+                      <p key={size}>
+                        Size: {size} - Stock: {stock}
+                      </p>
+                    ))}
                   </Card.Text>
                 </Card.Body>
                 <Card.Footer className="d-flex-row">

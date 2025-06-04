@@ -110,11 +110,12 @@ export default function Dashboard() {
                         : `${product.quantity} left`}
                     </span>
                     <br />
-                    Available sizes:
+                    Available sizes
+                    <br />
                     {Object.entries(product.sizes).map(([size, stock]) => (
-                      <p key={size}>
-                        Size: {size} - Stock: {stock}
-                      </p>
+                      <span key={size}>
+                        {size} - {stock}{" "}
+                      </span>
                     ))}
                   </Card.Text>
                 </Card.Body>

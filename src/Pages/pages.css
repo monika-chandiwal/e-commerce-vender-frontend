@@ -46,6 +46,7 @@
 .footerContent :link:hover {
   text-decoration: underline;
   font-size: 1rem;
+  cursor: pointer;
 }
 
 .vendorProducts {
@@ -78,4 +79,5 @@
 
 .vendorProducts li:hover {
   transform: scale(1.05);
+  cursor: pointer;
 }

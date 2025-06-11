@@ -1,6 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect, useContext } from "react";
-import { Navbar, Nav, Container, Form, Card } from "react-bootstrap";
+import { Navbar, Nav, Container, Form, Card, Image } from "react-bootstrap";
 import { FaRegHeart, FaRegUserCircle } from "react-icons/fa";
 import "./Navbar.css";
 import { useNavigate } from "react-router-dom";
@@ -81,15 +81,17 @@ export default function NavbarComponent() {
     >
       {" "}
       <Container fluid className="mx-2 ">
-        <Navbar.Brand href="/">StyliQue</Navbar.Brand>
+        <Navbar.Brand href="/">
+          <Image src=""></Image>
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto align-items-center w-100">
-            <Nav.Link href="/">Sell</Nav.Link>
-            <Nav.Link href="/women">Success Stories</Nav.Link>
-            <Nav.Link href="/women">Services</Nav.Link>
+            <Nav.Link href="#sell">Sell</Nav.Link>
+            <Nav.Link href="#success">Success Stories</Nav.Link>
+            <Nav.Link href="#services">Services</Nav.Link>
 
-            <Nav.Link href="/kids">FAQs</Nav.Link>
+            <Nav.Link href="#faq">FAQs</Nav.Link>
           </Nav>
           <Nav className="flex-d justify-content-center align-items-center">
             {isLoggedIn ? (

@@ -81,3 +81,17 @@
   transform: scale(1.05);
   cursor: pointer;
 }
+
+.carousel-image {
+  min-width: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  height: 60vh;
+}
+
+.footer-fixed {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
